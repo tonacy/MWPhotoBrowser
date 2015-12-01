@@ -62,6 +62,10 @@
 - (id)initWithPhotos:(NSArray *)photosArray;
 - (id)initWithDelegate:(id <MWPhotoBrowserDelegate>)delegate;
 
+// Customization
+- (void)setDoneButtonImage:(UIImage *)img;
+- (void)setActionButtonImage:(UIImage *)img;
+
 // Reloads the photo browser and refetches data
 - (void)reloadData;
 
