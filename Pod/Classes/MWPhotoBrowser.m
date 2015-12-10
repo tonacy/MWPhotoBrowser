@@ -35,6 +35,15 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	return self;
 }
 
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+	self = [super initWithNibName: nibNameOrNil bundle: nibBundleOrNil];
+	if (self) _isPresented = YES;
+	return self;
+}
+
+
 - (id)initWithPhotos:(NSArray *)photosArray {
 	if ((self = [self init])) {
 		_fixedPhotosArray = photosArray;
@@ -224,6 +233,14 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 		if (_doneButtonImage != nil) {
 			[_doneButton setImage:_doneButtonImage];
 		}
+		
+		if ([_delegate respondsToSelector:@selector(leftNavBarButton)]) {
+			_leftNavButton = [_delegate leftNavBarButton];
+			[_leftNavButton setTarget:self];
+			[_leftNavButton setAction:@selector(leftNavBarButtonPressed:)];
+			self.navigationItem.leftBarButtonItem = _leftNavButton;
+		}
+		
 		self.navigationItem.rightBarButtonItem = _doneButton;
 	} else {
 		// We're not first so show back button
@@ -1263,9 +1280,11 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	if (error) {
 		// Error occured so dismiss with a delay incase error was immediate and we need to wait to dismiss the VC
 		dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+			_isPresented = NO;
 			[self dismissViewControllerAnimated:YES completion:nil];
 		});
 	} else {
+		_isPresented = NO;
 		[self dismissViewControllerAnimated:YES completion:nil];
 	}
 	
@@ -1576,8 +1595,16 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 			// Call delegate method and let them dismiss us
 			[_delegate photoBrowserDidFinishModalPresentation:self];
 		} else  {
+			_isPresented = NO;
 			[self dismissViewControllerAnimated:YES completion:nil];
 		}
+	}
+}
+
+
+- (void)leftNavBarButtonPressed:(id)sender {
+	if (_leftNavButton && ([_delegate respondsToSelector:@selector(photoBrowser:pressedLeftNavButtonAtIndex:)])) {
+		[_delegate photoBrowser:self pressedLeftNavButtonAtIndex:_currentPageIndex];
 	}
 }
 
