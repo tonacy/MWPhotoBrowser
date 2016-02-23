@@ -265,12 +265,18 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 	UIBarButtonItem *flexSpace = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
 	NSMutableArray *items = [[NSMutableArray alloc] init];
 	
-	// Left button - Grid or Share Action
-	if (_enableShare) {
-		hasItems = YES;
-		[items addObject:[[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped)]];
-	}
-	else
+  // Left button - Grid or Share Action
+  if (_enableShare) {
+    hasItems = YES;
+    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped:)];
+    shareButton.width = 26;
+    [items addObject:shareButton];
+    for (UIImage *image in self.buttonImages) {
+      UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped:)];
+      button.width = 26;
+      [items addObject:button];
+    }
+  } else
 		if (_enableGrid) {
 			hasItems = YES;
 			[items addObject:[[UIBarButtonItem alloc] initWithImage:[UIImage imageForResourcePath:@"MWPhotoBrowser.bundle/UIBarButtonItemGrid" ofType:@"png" inBundle:[NSBundle bundleForClass:[self class]]] style:UIBarButtonItemStylePlain target:self action:@selector(showGridAnimated)]];
@@ -1320,10 +1326,11 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 
 #pragma mark - Share
 
-- (void)shareTapped {
-	if ([self.delegate respondsToSelector:@selector(photoBrowser:shareTappedAtIndex:)]) {
-		[self.delegate photoBrowser:self shareTappedAtIndex:_currentPageIndex];
-	}
+- (void)shareTapped:(id)sender {
+  int itemIndex = [_toolbar.items indexOfObject:sender];
+  if ([self.delegate respondsToSelector:@selector(photoBrowser:buttonTappedAtIndex:atPhotoIndex:)]) {
+    [self.delegate photoBrowser:self buttonTappedAtIndex:itemIndex atPhotoIndex:_currentPageIndex];
+  }
 }
 
 #pragma mark - Grid

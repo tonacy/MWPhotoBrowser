@@ -37,6 +37,7 @@
 - (void)photoBrowserDidFinishModalPresentation:(MWPhotoBrowser *)photoBrowser;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser pressedLeftNavButtonAtIndex:(NSUInteger)index;
 - (void)photoBrowser:(MWPhotoBrowser *)photoBrowser shareTappedAtIndex:(NSUInteger)index;
+- (void)photoBrowser:(MWPhotoBrowser *)photoBrowser buttonTappedAtIndex:(NSUInteger)buttonIndex atPhotoIndex:(NSUInteger)index;
 - (UIBarButtonItem *)leftNavBarButton;
 
 @end
@@ -55,6 +56,7 @@
 @property (nonatomic) BOOL startOnGrid;
 @property (nonatomic) BOOL autoPlayOnAppear;
 @property (nonatomic) BOOL isPresented;
+@property (nonatomic) NSArray *buttonImages;
 @property (nonatomic) NSUInteger delayToHideElements;
 @property (nonatomic, readonly) NSUInteger currentIndex;
 @property (nonatomic, strong) UIBarButtonItem *leftNavButton;
