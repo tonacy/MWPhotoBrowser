@@ -17,6 +17,12 @@
 
 static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 
+@interface MWPhotoBrowser()
+
+@property(nonatomic, strong) NSMutableArray *buttonArray;
+
+@end
+
 @implementation MWPhotoBrowser
 
 #pragma mark - Init
@@ -268,12 +274,25 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
   // Left button - Grid or Share Action
   if (_enableShare) {
     hasItems = YES;
-    UIBarButtonItem *shareButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"share"] style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped:)];
-    shareButton.width = 26;
-    [items addObject:shareButton];
+    _buttonArray = [NSMutableArray new];
+    UIButton *shareButton = [[UIButton alloc] init];
+    [shareButton setImage:[[UIImage imageNamed:@"share"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+    [shareButton addTarget:self action:@selector(shareTapped:) forControlEvents:UIControlEventTouchUpInside];
+    shareButton.showsTouchWhenHighlighted = true;
+    [self.buttonArray addObject:shareButton];
+    UIBarButtonItem *shareBarButton = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
+    shareBarButton.width = 26;
+    [shareButton sizeToFit];
+    [items addObject:shareBarButton];
     for (UIImage *image in self.buttonImages) {
-      UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(shareTapped:)];
+      UIButton *shareButton = [[UIButton alloc] init];
+      [shareButton setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] forState:UIControlStateNormal];
+      [shareButton addTarget:self action:@selector(shareTapped:) forControlEvents:UIControlEventTouchUpInside];
+      shareButton.showsTouchWhenHighlighted = true;
+      UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithCustomView:shareButton];
       button.width = 26;
+      [shareButton sizeToFit];
+      [self.buttonArray addObject:shareButton];
       [items addObject:button];
     }
   } else
