@@ -1346,7 +1346,7 @@ static void * MWVideoPlayerObservation = &MWVideoPlayerObservation;
 #pragma mark - Share
 
 - (void)shareTapped:(id)sender {
-  int itemIndex = [_toolbar.items indexOfObject:sender];
+  int itemIndex = [self.buttonArray indexOfObject:sender];
   if ([self.delegate respondsToSelector:@selector(photoBrowser:buttonTappedAtIndex:atPhotoIndex:)]) {
     [self.delegate photoBrowser:self buttonTappedAtIndex:itemIndex atPhotoIndex:_currentPageIndex];
   }
