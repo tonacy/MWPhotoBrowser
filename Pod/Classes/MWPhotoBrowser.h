@@ -84,4 +84,7 @@
 - (void)showNextPhotoAnimated:(BOOL)animated;
 - (void)showPreviousPhotoAnimated:(BOOL)animated;
 
+// Interactions
+- (void)photoDidZoom;
+
 @end
